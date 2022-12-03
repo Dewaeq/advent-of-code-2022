@@ -4,22 +4,18 @@ pub fn part_one(input: &str) -> u32 {
     input
         .lines()
         .map(|sack| {
-            let chars = sack.chars().collect::<Vec<_>>();
-            let (first, second) = chars.split_at(sack.len() / 2);
-            first
-                .iter()
-                .filter(|&item| second.contains(item))
-                .collect::<HashSet<_>>()
-                .iter()
-                .map(|&priority| {
-                    let x = *priority as u8;
-                    if x < 91 {
-                        (x - 38) as u32
-                    } else {
-                        (x - 96) as u32
-                    }
-                })
-                .sum::<u32>()
+            let (a, b) = sack.split_at(sack.len() / 2);
+            let first = a.chars().collect::<HashSet<_>>();
+            let second = b.chars().collect::<HashSet<_>>();
+
+            first.intersection(&second).map(|&item| {
+                let x = item as u32;
+                if x < 91 {
+                    x - 38
+                } else {
+                    x - 96
+                }
+            }).sum::<u32>()
         })
         .sum()
 }
